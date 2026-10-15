@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)file:///C:/Users/AliciaDPolak/Downloads/med-vitals-tracker.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medication &amp; Vitals Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./Medication &amp; Vitals Tracker_files/css2" rel="stylesheet">
+<style>
+  :root{
+    --bg:#17212B; --bg-elevated:#1F2C39; --bg-card:#243440;
+    --line: rgba(237,234,228,0.10);
+    --text:#EDEAE4; --text-muted:#9FB0BE;
+    --amber:#E3A548; --sage:#7FA894; --coral:#E0725F;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:640px;margin:0 auto;padding:28px 20px 80px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--coral);margin:0 0 6px;}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,5vw,36px);margin:0 0 6px;letter-spacing:-0.01em;}
+  .sub{color:var(--text-muted);font-size:15px;margin:0 0 22px;max-width:56ch;}
+  .hero{background:var(--bg-elevated);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:22px;font-size:15px;color:var(--text-muted);}
+  .hero strong{color:var(--text);font-weight:600;}
+  .tabs{display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid var(--line);}
+  .tab{
+    background:transparent;border:none;color:var(--text-muted);padding:10px 4px 12px;font-size:15px;
+    font-family:'IBM Plex Sans',sans-serif;cursor:pointer;border-bottom:2px solid transparent;margin-right:16px;font-weight:500;
+  }
+  .tab.active{color:var(--text);border-bottom-color:var(--amber);font-weight:600;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .section-title{font-family:'Fraunces',serif;font-size:19px;margin:24px 0 12px;font-weight:600;}
+  .section-title:first-child{margin-top:0;}
+  .card{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;}
+  .med-row{
+    display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);
+  }
+  .med-row:last-child{border-bottom:none;}
+  .checkbox{
+    width:26px;height:26px;border-radius:8px;border:2px solid var(--text-muted);flex-shrink:0;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;background:transparent;
+  }
+  .checkbox.checked{background:var(--sage);border-color:var(--sage);}
+  .checkbox.checked::after{content:'✓';color:#0E1A14;font-weight:700;font-size:15px;}
+  .med-info{flex:1;}
+  .med-name{font-weight:600;font-size:15.5px;}
+  .med-dose{font-size:13px;color:var(--text-muted);}
+  .med-del{background:transparent;border:1px solid var(--line);color:var(--text-muted);border-radius:8px;padding:5px 9px;font-size:11.5px;cursor:pointer;}
+  .add-med{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+  .add-med input{flex:1;min-width:110px;background:var(--bg-elevated);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:10px 12px;font-size:14px;font-family:'IBM Plex Sans',sans-serif;}
+  .add-med input:focus{outline:2px solid var(--amber);outline-offset:-1px;}
+  .add-med button{background:var(--amber);color:#1B1206;border:none;border-radius:8px;padding:10px 16px;font-weight:600;font-size:14px;cursor:pointer;}
+  .empty{text-align:center;padding:30px 20px;color:var(--text-muted);border:1px dashed var(--line);border-radius:var(--radius);}
+  label{display:block;font-size:12.5px;color:var(--text-muted);margin:14px 0 7px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;text-transform:uppercase;}
+  label:first-of-type{margin-top:0;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  input[type=number],input[type=date],input[type=range]{
+    width:100%;background:var(--bg-elevated);border:1px solid var(--line);border-radius:8px;color:var(--text);
+    padding:11px 12px;font-family:'IBM Plex Mono',monospace;font-size:15px;
+  }
+  input[type=range]{padding:0;height:6px;accent-color:var(--amber);}
+  .mood-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:6px;}
+  textarea{width:100%;background:var(--bg-elevated);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:11px 12px;font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;min-height:60px;resize:vertical;}
+  .save-btn{margin-top:18px;width:100%;background:var(--amber);color:#1B1206;border:none;border-radius:10px;padding:14px;font-weight:600;font-size:15.5px;cursor:pointer;}
+  .vital-item{background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;}
+  .vital-item .meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-muted);}
+  .vital-item .figs{font-size:14px;margin-top:4px;}
+  .vital-item .figs b{color:var(--sage);}
+  .del{background:transparent;border:1px solid var(--line);color:var(--text-muted);border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Daily Health</p>
+  <h1>Medication &amp; Vitals</h1>
+  <p class="sub">Check off what you've taken today, and keep a running log of blood pressure, mood, and sleep.</p>
+  <div class="hero" id="hero">No medications added yet.</div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="meds">Today's meds</button>
+    <button class="tab" data-tab="vitals">Vitals &amp; mood</button>
+  </div>
+
+  <div class="panel active" id="panel-meds">
+    <div class="card">
+      <div id="medList"><div class="empty">No medications yet — add your first one below.</div></div>
+      <div class="add-med">
+        <input type="text" id="newMedName" placeholder="Medication name">
+        <input type="text" id="newMedDose" placeholder="Dose / schedule (e.g. 20mg, morning)">
+        <button id="addMedBtn">+ Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-vitals">
+    <div class="section-title">Log today's vitals</div>
+    <div class="card">
+      <label>Blood pressure (mmHg)</label>
+      <div class="grid2">
+        <input type="number" id="fSys" placeholder="Systolic">
+        <input type="number" id="fDia" placeholder="Diastolic">
+      </div>
+      <label for="fMood">Mood (1 = very low, 5 = very good): <span id="moodVal">3</span></label>
+      <input type="range" id="fMood" min="1" max="5" value="3">
+      <div class="mood-labels"><span>Very low</span><span>Very good</span></div>
+      <label for="fSleep">Sleep last night (hours)</label>
+      <input type="number" id="fSleep" step="0.5" placeholder="e.g. 6.5">
+      <label for="fVNotes">Notes (optional)</label>
+      <textarea id="fVNotes" placeholder="Anything worth noting — anxiety, pain flare, side effects…"></textarea>
+      <button class="save-btn" id="saveVitalBtn">Save today's vitals</button>
+    </div>
+
+    <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <span>Recent entries</span>
+      <button class="med-del" id="exportCsvBtn" style="font-size:12.5px;padding:6px 12px;">Export CSV</button>
+    </div>
+    <div id="vitalsList"><div class="empty">No vitals logged yet.</div></div>
+  </div>
+</div>
+
+<script>
+const MED_KEY = 'med-list';
+const CHECK_KEY = 'med-checks';
+const VITALS_KEY = 'vitals-logs';
+
+let meds = [];
+let checksByDate = {};
+let vitals = [];
+
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+const TODAY = todayStr();
+
+async function loadAll(){
+  try{ const r = await window.storage.get(MED_KEY); meds = r ? JSON.parse(r.value) : []; }catch(e){ meds = []; }
+  try{ const r = await window.storage.get(CHECK_KEY); checksByDate = r ? JSON.parse(r.value) : {}; }catch(e){ checksByDate = {}; }
+  try{ const r = await window.storage.get(VITALS_KEY); vitals = r ? JSON.parse(r.value) : []; }catch(e){ vitals = []; }
+  renderAll();
+}
+
+async function persistMeds(){ try{ await window.storage.set(MED_KEY, JSON.stringify(meds)); }catch(e){console.error(e);} }
+async function persistChecks(){ try{ await window.storage.set(CHECK_KEY, JSON.stringify(checksByDate)); }catch(e){console.error(e);} }
+async function persistVitals(){ try{ await window.storage.set(VITALS_KEY, JSON.stringify(vitals)); }catch(e){console.error(e);} }
+
+function escapeHtml(s){
+  const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+}
+
+function renderHero(){
+  const hero = document.getElementById('hero');
+  const todaysChecks = checksByDate[TODAY] || {};
+  const doneCount = meds.filter(m => todaysChecks[m.id]).length;
+  const lastVital = vitals.slice().sort((a,b)=> b.date.localeCompare(a.date))[0];
+  let line = meds.length
+    ? `Today: <strong>${doneCount} of ${meds.length}</strong> medications logged.`
+    : `No medications added yet.`;
+  if(lastVital){
+    line += ` Last vitals: <strong>${lastVital.sys}/${lastVital.dia}</strong> mmHg, mood <strong>${lastVital.mood}/5</strong> on ${lastVital.date}.`;
+  }
+  hero.innerHTML = line;
+}
+
+function renderMeds(){
+  const list = document.getElementById('medList');
+  list.innerHTML = '';
+  if(meds.length === 0){
+    list.innerHTML = `<div class="empty">No medications yet — add your first one below.</div>`;
+    return;
+  }
+  const todaysChecks = checksByDate[TODAY] || {};
+  meds.forEach(m=>{
+    const row = document.createElement('div');
+    row.className = 'med-row';
+    const checked = !!todaysChecks[m.id];
+    row.innerHTML = `
+      <div class="checkbox ${checked?'checked':''}" data-check="${m.id}"></div>
+      <div class="med-info">
+        <div class="med-name">${escapeHtml(m.name)}</div>
+        ${m.dose ? `<div class="med-dose">${escapeHtml(m.dose)}</div>` : ''}
+      </div>
+      <button class="med-del" data-delmed="${m.id}">Remove</button>
+    `;
+    list.appendChild(row);
+  });
+  list.querySelectorAll('[data-check]').forEach(el=>{
+    el.onclick = async ()=>{
+      const id = el.dataset.check;
+      if(!checksByDate[TODAY]) checksByDate[TODAY] = {};
+      checksByDate[TODAY][id] = !checksByDate[TODAY][id];
+      await persistChecks();
+      renderAll();
+    };
+  });
+  list.querySelectorAll('[data-delmed]').forEach(el=>{
+    el.onclick = async ()=>{
+      meds = meds.filter(m=> m.id !== el.dataset.delmed);
+      await persistMeds();
+      renderAll();
+    };
+  });
+}
+
+function renderVitalsList(){
+  const el = document.getElementById('vitalsList');
+  el.innerHTML = '';
+  const sorted = vitals.slice().sort((a,b)=> b.date.localeCompare(a.date));
+  if(sorted.length === 0){
+    el.innerHTML = `<div class="empty">No vitals logged yet.</div>`;
+    return;
+  }
+  sorted.slice(0,20).forEach(v=>{
+    const item = document.createElement('div');
+    item.className = 'vital-item';
+    item.innerHTML = `
+      <div>
+        <div class="meta">${v.date}</div>
+        <div class="figs">BP <b>${v.sys}/${v.dia}</b> · Mood <b>${v.mood}/5</b>${v.sleep ? ` · Sleep <b>${v.sleep}h</b>` : ''}</div>
+        ${v.notes ? `<div style="font-size:13px;color:var(--text-muted);margin-top:4px;">${escapeHtml(v.notes)}</div>` : ''}
+      </div>
+      <button class="del" data-delv="${v.id}">Delete</button>
+    `;
+    el.appendChild(item);
+  });
+  el.querySelectorAll('[data-delv]').forEach(b=>{
+    b.onclick = async ()=>{
+      vitals = vitals.filter(v=> v.id !== b.dataset.delv);
+      await persistVitals();
+      renderAll();
+    };
+  });
+}
+
+function renderAll(){
+  renderHero();
+  renderMeds();
+  renderVitalsList();
+}
+
+document.querySelectorAll('.tab').forEach(t=>{
+  t.onclick = ()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+  };
+});
+
+document.getElementById('addMedBtn').onclick = async ()=>{
+  const name = document.getElementById('newMedName').value.trim();
+  const dose = document.getElementById('newMedDose').value.trim();
+  if(!name) return;
+  meds.push({id: 'm'+Date.now(), name, dose});
+  await persistMeds();
+  document.getElementById('newMedName').value = '';
+  document.getElementById('newMedDose').value = '';
+  renderAll();
+};
+
+document.getElementById('fMood').oninput = (e)=>{ document.getElementById('moodVal').textContent = e.target.value; };
+
+function csvEscape(v){
+  const s = String(v ?? '');
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
+}
+
+document.getElementById('exportCsvBtn').onclick = ()=>{
+  const rows = [['Date','Systolic','Diastolic','Mood (1-5)','Sleep (hours)','Notes']];
+  vitals.slice().sort((a,b)=> a.date.localeCompare(b.date)).forEach(v=>{
+    rows.push([v.date, v.sys, v.dia, v.mood, v.sleep || '', v.notes || '']);
+  });
+  const csv = rows.map(r=> r.map(csvEscape).join(',')).join('\r\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `vitals-log-${TODAY}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+document.getElementById('saveVitalBtn').onclick = async ()=>{
+  const sys = document.getElementById('fSys').value;
+  const dia = document.getElementById('fDia').value;
+  if(!sys || !dia){ document.getElementById('fSys').focus(); return; }
+  const mood = document.getElementById('fMood').value;
+  const sleep = document.getElementById('fSleep').value;
+  const notes = document.getElementById('fVNotes').value.trim();
+  const existing = vitals.find(v=> v.date === TODAY);
+  const entry = { id: existing ? existing.id : 'v'+Date.now(), date: TODAY, sys, dia, mood, sleep, notes };
+  if(existing) Object.assign(existing, entry);
+  else vitals.push(entry);
+  await persistVitals();
+  document.getElementById('fSys').value = '';
+  document.getElementById('fDia').value = '';
+  document.getElementById('fSleep').value = '';
+  document.getElementById('fVNotes').value = '';
+  renderAll();
+};
+
+loadAll();
+</script>
+
+
+</body></html>
